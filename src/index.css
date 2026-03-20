@@ -53,7 +53,6 @@ body {
 }
 
 #root {
-  min-height: 100vh;
   display: flex;
   justify-content: center;
   padding: 0;
@@ -559,21 +558,111 @@ body {
 }
 
 /* ═══════════ RESPONSIVE ═══════════ */
+
+/* Tablet */
+@media (max-width: 768px) {
+  .form-card {
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+  }
+  .amenities-grid { grid-template-columns: repeat(4, 1fr); gap: 8px; }
+}
+
+/* Mobile */
 @media (max-width: 520px) {
-  #root { padding: 8px 6px 32px; }
-  .form-header { padding: 20px 16px 16px; }
-  .form-header-logo { width: 160px; }
-  .form-header h1 { font-size: 1.3rem; }
-  .progress-container { padding: 16px 16px 0; }
-  .form-body { padding: 18px 16px 22px; }
-  .step-title { font-size: 1rem; }
+  #root { padding: 0; }
 
-  .operation-grid { grid-template-columns: 1fr; }
-  .property-type-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
-  .amenities-grid { grid-template-columns: repeat(2, 1fr); }
+  .form-card {
+    border-radius: 0;
+    box-shadow: none;
+    border: none;
+    max-width: 100%;
+  }
 
-  .field-row { grid-template-columns: 1fr; gap: 0; }
+  .progress-container { padding: 14px 16px 0; }
+  .progress-bar-track { height: 22px; }
+  .progress-bar-label { font-size: 0.62rem; padding-right: 8px; }
+  .progress-text { font-size: 0.78rem; margin-bottom: 6px; }
+
+  .form-body { padding: 16px 16px 20px; }
+  .step-title { font-size: 0.95rem; margin-bottom: 16px; }
+
+  /* Operation cards — stack vertically */
+  .operation-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .operation-card { padding: 20px 12px 18px; gap: 8px; }
+  .operation-icon { width: 48px; height: 48px; }
+  .operation-label { font-size: 0.88rem; }
+  .operation-desc { font-size: 0.68rem; }
+
+  /* Property type — 3 col but smaller */
+  .property-type-grid { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .property-type-card { padding: 12px 4px 10px; gap: 4px; }
+  .pt-icon .icon { width: 22px; height: 22px; }
+  .pt-label { font-size: 0.58rem; }
+
+  /* Features */
   .feature-row { flex-direction: column; align-items: flex-start; gap: 8px; }
-  .form-actions { flex-direction: row; }
-  .btn { padding: 0 24px; }
+  .feature-label { min-width: unset; font-size: 0.84rem; }
+  .number-selector { gap: 5px; }
+  .number-btn { width: 42px; height: 38px; font-size: 0.84rem; }
+
+  /* Amenities — 2 col on mobile */
+  .amenities-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .amenity-card { padding: 12px 6px 10px; }
+  .amenity-icon .icon { width: 26px; height: 26px; }
+  .amenity-label { font-size: 0.64rem; }
+
+  /* Form fields */
+  .field-row { grid-template-columns: 1fr; gap: 0; }
+  .field-input, .field-select, .field-textarea {
+    height: 48px;
+    font-size: 16px; /* Prevents iOS zoom on focus */
+  }
+  .field-textarea { min-height: 90px; }
+  .field-group label { font-size: 0.8rem; }
+
+  /* Phone */
+  .phone-prefix { width: 60px; height: 48px; font-size: 16px; }
+  .phone-number { height: 48px; font-size: 16px; }
+
+  /* Buttons — full width */
+  .form-actions {
+    flex-direction: column-reverse;
+    gap: 8px;
+  }
+  .btn {
+    width: 100%;
+    height: 48px;
+    padding: 0;
+    font-size: 0.84rem;
+  }
+  .btn-submit { border-radius: var(--radius); }
+
+  /* Success */
+  .success-container { padding: 32px 20px 40px; }
+  .success-icon { width: 64px; height: 64px; }
+  .success-title { font-size: 1.2rem; }
+  .success-message { font-size: 0.84rem; }
+
+  /* Autocomplete */
+  .autocomplete-dropdown { max-height: 200px; }
+  .autocomplete-item { padding: 14px 12px; font-size: 0.82rem; }
+}
+
+/* Small phones */
+@media (max-width: 380px) {
+  .property-type-grid { grid-template-columns: repeat(2, 1fr); }
+  .operation-grid { grid-template-columns: 1fr; gap: 8px; }
+  .amenities-grid { grid-template-columns: repeat(2, 1fr); }
+  .number-btn { width: 38px; height: 36px; font-size: 0.8rem; }
+}
+
+/* Touch-friendly: bigger tap targets */
+@media (hover: none) {
+  .operation-card:hover { transform: none; box-shadow: none; }
+  .btn-submit:hover:not(:disabled) { transform: none; }
+  .operation-card:active { transform: scale(0.98); }
+  .property-type-card:active { transform: scale(0.96); }
+  .amenity-card:active { transform: scale(0.96); }
+  .number-btn:active { transform: scale(0.95); }
 }
