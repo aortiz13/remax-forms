@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 
 const API_URL = import.meta.env.VITE_API_URL || 'https://remax-crm-remax-app.jzuuqr.easypanel.host'
-const REMAX_LOGO = 'https://remax-exclusive.cl/wp-content/uploads/2025/04/LOGO-2025-EXCLUSIVE-GLOBO-DE-LADO.-SF-CREMA-PNG-1024x451.png'
+const REMAX_LOGO = 'https://res.cloudinary.com/dhzmkxbek/image/upload/v1770205777/Globo_REMAX_sin_fondo_PNG_xiqr1a.png'
 
 export default function LeadPage() {
   const { shortId } = useParams()
@@ -236,12 +236,7 @@ export default function LeadPage() {
         </div>
       )}
 
-      {/* CRM Link */}
-      <div className="lead-footer">
-        <a href="https://solicitudes.remax-exclusive.cl" className="crm-link" target="_blank" rel="noopener">
-          Ir al CRM RE/MAX Exclusive →
-        </a>
-      </div>
+
     </div>
   )
 }
