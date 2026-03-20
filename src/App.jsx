@@ -3,6 +3,52 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 const API_URL = import.meta.env.VITE_API_URL || 'https://remax-crm-remax-app.jzuuqr.easypanel.host'
 const FORM_SECRET = import.meta.env.VITE_FORM_SECRET || 'remax-web-forms-2026'
 
+// Country codes — LATAM first (Chile on top), then rest of world
+const COUNTRY_CODES = [
+  // LATAM
+  { code: '56', flag: '🇨🇱', name: 'Chile' },
+  { code: '54', flag: '🇦🇷', name: 'Argentina' },
+  { code: '591', flag: '🇧🇴', name: 'Bolivia' },
+  { code: '55', flag: '🇧🇷', name: 'Brasil' },
+  { code: '57', flag: '🇨🇴', name: 'Colombia' },
+  { code: '506', flag: '🇨🇷', name: 'Costa Rica' },
+  { code: '53', flag: '🇨🇺', name: 'Cuba' },
+  { code: '593', flag: '🇪🇨', name: 'Ecuador' },
+  { code: '503', flag: '🇸🇻', name: 'El Salvador' },
+  { code: '502', flag: '🇬🇹', name: 'Guatemala' },
+  { code: '504', flag: '🇭🇳', name: 'Honduras' },
+  { code: '52', flag: '🇲🇽', name: 'México' },
+  { code: '505', flag: '🇳🇮', name: 'Nicaragua' },
+  { code: '507', flag: '🇵🇦', name: 'Panamá' },
+  { code: '595', flag: '🇵🇾', name: 'Paraguay' },
+  { code: '51', flag: '🇵🇪', name: 'Perú' },
+  { code: '1', flag: '🇵🇷', name: 'Puerto Rico' },
+  { code: '1', flag: '🇩🇴', name: 'Rep. Dominicana' },
+  { code: '598', flag: '🇺🇾', name: 'Uruguay' },
+  { code: '58', flag: '🇻🇪', name: 'Venezuela' },
+  // North America & Europe
+  { code: '1', flag: '🇺🇸', name: 'Estados Unidos' },
+  { code: '1', flag: '🇨🇦', name: 'Canadá' },
+  { code: '34', flag: '🇪🇸', name: 'España' },
+  { code: '33', flag: '🇫🇷', name: 'Francia' },
+  { code: '49', flag: '🇩🇪', name: 'Alemania' },
+  { code: '39', flag: '🇮🇹', name: 'Italia' },
+  { code: '44', flag: '🇬🇧', name: 'Reino Unido' },
+  { code: '351', flag: '🇵🇹', name: 'Portugal' },
+  { code: '31', flag: '🇳🇱', name: 'Países Bajos' },
+  { code: '41', flag: '🇨🇭', name: 'Suiza' },
+  { code: '46', flag: '🇸🇪', name: 'Suecia' },
+  { code: '47', flag: '🇳🇴', name: 'Noruega' },
+  // Asia & Oceania
+  { code: '86', flag: '🇨🇳', name: 'China' },
+  { code: '81', flag: '🇯🇵', name: 'Japón' },
+  { code: '82', flag: '🇰🇷', name: 'Corea del Sur' },
+  { code: '91', flag: '🇮🇳', name: 'India' },
+  { code: '61', flag: '🇦🇺', name: 'Australia' },
+  { code: '64', flag: '🇳🇿', name: 'Nueva Zelanda' },
+  { code: '972', flag: '🇮🇱', name: 'Israel' },
+  { code: '971', flag: '🇦🇪', name: 'Emiratos Árabes' },
+]
 
 const TOTAL_STEPS = 5
 
@@ -161,6 +207,7 @@ export default function App() {
     amenities: [],
     first_name: '', last_name: '', email: '', phone: '', observations: '',
   })
+  const [phoneCountry, setPhoneCountry] = useState(COUNTRY_CODES[0]) // Chile default
 
   const set = (field) => (e) => {
     const val = e.target ? e.target.value : e
@@ -209,7 +256,7 @@ export default function App() {
         body: JSON.stringify({
           form_type: 'vender',
           ...form,
-          phone: `56${form.phone.replace(/\D/g, '')}`,
+          phone: `${phoneCountry.code}${form.phone.replace(/\D/g, '')}`,
           bedrooms: form.bedrooms === '>4' ? 5 : (form.bedrooms ? parseInt(form.bedrooms) : null),
           bathrooms: form.bathrooms === '>4' ? 5 : (form.bathrooms ? parseInt(form.bathrooms) : null),
         }),
@@ -502,9 +549,25 @@ function Step5Contact({ form, set, errors }) {
         <div className="field-group">
           <label>Número de teléfono <span className="required">*</span></label>
           <div className="phone-field">
-            <input className="field-input phone-prefix" value="+56" readOnly tabIndex={-1} />
+            <div className="phone-country-select">
+              <select
+                className="country-dropdown"
+                value={`${phoneCountry.flag}|${phoneCountry.code}|${phoneCountry.name}`}
+                onChange={e => {
+                  const [flag, code, name] = e.target.value.split('|')
+                  setPhoneCountry({ flag, code, name })
+                }}
+              >
+                {COUNTRY_CODES.map((c, i) => (
+                  <option key={`${c.code}-${c.flag}-${i}`} value={`${c.flag}|${c.code}|${c.name}`}>
+                    {c.flag} +{c.code}
+                  </option>
+                ))}
+              </select>
+              <span className="country-display">{phoneCountry.flag} +{phoneCountry.code}</span>
+            </div>
             <input className={`field-input phone-number ${errors.phone ? 'error' : ''}`}
-              type="tel" placeholder="Número de teléfono" maxLength={11}
+              type="tel" placeholder="Número de teléfono" maxLength={15}
               value={form.phone} onChange={set('phone')} />
           </div>
           {errors.phone && <div className="field-error">{errors.phone}</div>}

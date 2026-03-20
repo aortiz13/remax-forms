@@ -414,14 +414,38 @@ body {
 
 /* Phone */
 .phone-field { display: flex; gap: 8px; }
-.phone-prefix {
-  width: 65px;
+.phone-country-select {
+  position: relative;
   flex-shrink: 0;
-  text-align: center;
+  width: 100px;
+}
+.country-dropdown {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  font-size: 16px;
+  z-index: 2;
+}
+.country-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
+  height: 100%;
+  padding: 0 10px;
   background: var(--gray-100);
-  color: var(--gray-600);
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--radius);
+  font-size: 0.9rem;
   font-weight: 600;
-  cursor: default;
+  color: var(--gray-700);
+  pointer-events: none;
+  white-space: nowrap;
+  min-height: 52px;
 }
 .phone-number { flex: 1; }
 
@@ -622,7 +646,8 @@ body {
   .field-group label { font-size: 0.8rem; }
 
   /* Phone */
-  .phone-prefix { width: 60px; height: 48px; font-size: 16px; }
+  .phone-country-select { width: 90px; }
+  .country-display { font-size: 0.82rem; min-height: 48px; }
   .phone-number { height: 48px; font-size: 16px; }
 
   /* Buttons — full width */
