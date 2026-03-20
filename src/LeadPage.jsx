@@ -235,7 +235,17 @@ export default function LeadPage() {
           </div>
         </div>
       )}
-
+      {/* CRM Access Button — shown when assigned */}
+      {assigned && contact && (
+        <a
+          href={`https://solicitudes.remax-exclusive.cl/crm?contact=${contact.id}`}
+          className="crm-access-btn"
+          target="_blank"
+          rel="noopener"
+        >
+          🔗 Ver Lead en el CRM
+        </a>
+      )}
 
     </div>
   )

@@ -911,6 +911,34 @@ body {
   animation: spin 0.7s linear infinite;
 }
 
+/* CRM Access Button */
+.crm-access-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: calc(100% - 40px);
+  margin: 8px 20px 0;
+  padding: 18px;
+  background: linear-gradient(135deg, #003DA5, #0052d4);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.05rem;
+  font-weight: 800;
+  font-family: var(--font-main);
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  transition: all 0.2s;
+  box-shadow: 0 4px 14px rgba(0,61,165,0.25);
+}
+.crm-access-btn:hover {
+  background: linear-gradient(135deg, #002d7a, #003DA5);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,61,165,0.35);
+}
+
 /* Lead page responsive */
 @media (max-width: 520px) {
   .lead-page { padding: 0 0 32px; }
