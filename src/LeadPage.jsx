@@ -134,7 +134,7 @@ export default function LeadPage() {
         </div>
       )}
 
-      {/* Property Card */}
+      {/* Property Card (for vender leads) */}
       {property && (
         <div className="lead-card">
           <div className="lead-card-header">
@@ -201,6 +201,76 @@ export default function LeadPage() {
           </div>
         </div>
       )}
+
+      {/* Search Details Card (for comprar/buscar leads — no property, data in rawData) */}
+      {!property && lead.rawData && (() => {
+        const raw = Array.isArray(lead.rawData) ? lead.rawData[0] : lead.rawData
+        const busqueda = raw?.['Búsqueda']
+        if (!busqueda) return null
+        const amenityLabels = {
+          parking: 'Estacionamiento', garden: 'Jardín', pool: 'Piscina',
+          elevator: 'Ascensor', terrace: 'Terraza', gym: 'Gimnasio',
+          storage: 'Bodega', security: 'Conserje',
+        }
+        return (
+          <div className="lead-card">
+            <div className="lead-card-header">
+              <span className="lead-card-icon">🔍</span>
+              <h2>Búsqueda de Inmueble</h2>
+            </div>
+            <div className="lead-card-body">
+              {busqueda.tipo_operacion && (
+                <div className="lead-field">
+                  <label>Operación</label>
+                  <span className="lead-badge accent">{busqueda.tipo_operacion}</span>
+                </div>
+              )}
+              {busqueda.tipo_propiedad && (
+                <div className="lead-field">
+                  <label>Tipo de Inmueble</label>
+                  <span>{busqueda.tipo_propiedad}</span>
+                </div>
+              )}
+              {busqueda.presupuesto_maximo && (
+                <div className="lead-field">
+                  <label>Presupuesto Máx.</label>
+                  <span className="lead-badge">{busqueda.presupuesto_maximo}</span>
+                </div>
+              )}
+              {busqueda.zona && (
+                <div className="lead-field">
+                  <label>Zona / Comuna</label>
+                  <span>{busqueda.zona}</span>
+                </div>
+              )}
+              <div className="lead-field-row">
+                {busqueda.dormitorios && (
+                  <div className="lead-field compact">
+                    <label>Hab.</label>
+                    <span>{busqueda.dormitorios}</span>
+                  </div>
+                )}
+                {busqueda.banos && (
+                  <div className="lead-field compact">
+                    <label>Baños</label>
+                    <span>{busqueda.banos}</span>
+                  </div>
+                )}
+              </div>
+              {busqueda.amenities && busqueda.amenities.length > 0 && (
+                <div className="lead-field">
+                  <label>Características</label>
+                  <div className="lead-amenities-list">
+                    {busqueda.amenities.map(a => (
+                      <span key={a} className="lead-badge">{amenityLabels[a] || a}</span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )
+      })()}
 
       {/* Assignment Section */}
       {!assigned && (

@@ -836,6 +836,9 @@ body {
 .lead-badge.accent {
   background: #fce7f3; color: #be123c;
 }
+.lead-amenities-list {
+  display: flex; flex-wrap: wrap; gap: 6px;
+}
 
 .lead-field-row {
   display: grid; grid-template-columns: repeat(4, 1fr);
