@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from 'react'
 
 const API_URL = import.meta.env.VITE_API_URL || 'https://remax-crm-remax-app.jzuuqr.easypanel.host'
 const FORM_SECRET = import.meta.env.VITE_FORM_SECRET || 'remax-web-forms-2026'
-const REMAX_LOGO = 'https://res.cloudinary.com/dhzmkxbek/image/upload/v1770205777/Globo_REMAX_sin_fondo_PNG_xiqr1a.png'
 
 const COUNTRY_CODES = [
   { code: '56', flag: '🇨🇱', name: 'Chile' },
@@ -69,7 +68,7 @@ const AMENITIES = [
 
 const NUMBER_OPTIONS = ['1', '2', '3', '4', '>4']
 
-// ───── SVG Icons (reused from App) ─────
+// ───── SVG Icons (same as App) ─────
 const ICONS = {
   house: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1h-2z" /></svg>,
   apartment: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="2" width="16" height="20" rx="1" /><path d="M9 6h1m4 0h1M9 10h1m4 0h1M9 14h1m4 0h1M9 18h6" /></svg>,
@@ -94,7 +93,12 @@ const ICONS = {
   bed: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12h20v8H2z" /><path d="M2 20V4" /><path d="M22 20v-8" /><path d="M2 12V8a2 2 0 012-2h4a2 2 0 012 2v4" /></svg>,
   bath: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M4 12h16a1 1 0 011 1v3a4 4 0 01-4 4H7a4 4 0 01-4-4v-3a1 1 0 011-1z" /><path d="M6 12V5a2 2 0 012-2h1" /><path d="M7 20v2m10-2v2" /></svg>,
   check: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5" /></svg>,
+  chevronLeft: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>,
+  chevronRight: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6" /></svg>,
   send: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m22 2-7 20-4-9-9-4z" /><path d="M22 2 11 13" /></svg>,
+  x: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6M9 9l6 6" /></svg>,
+  search: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" /></svg>,
+  dollar: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" /></svg>,
 }
 
 function Icon({ name, size = 24, className = '' }) {
@@ -104,7 +108,7 @@ function Icon({ name, size = 24, className = '' }) {
 const validateEmail = (e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)
 const validatePhone = (p) => /^\d{7,15}$/.test(p.replace(/\D/g, ''))
 
-// ─── Iframe resize hook ─────
+// Iframe resize
 function useIframeResize() {
   const ref = useRef(null)
   useEffect(() => {
@@ -159,7 +163,6 @@ export default function BuscarForm() {
     const err = {}
     if (s === 0 && !form.operation_type) err.operation_type = 'Selecciona una opción'
     if (s === 1 && !form.property_type) err.property_type = 'Selecciona un tipo'
-    // step 2 (budget) and step 3 (zone) are optional
     if (s === 5) {
       if (!form.first_name.trim()) err.first_name = 'Requerido'
       if (!form.email.trim()) err.email = 'Requerido'
@@ -205,45 +208,48 @@ export default function BuscarForm() {
 
   if (submitted) {
     return (
-      <div className="form-wrapper" ref={wrapperRef}>
-        <div className="form-card success-card">
-          <div className="success-icon-wrap"><Icon name="check" size={40} /></div>
-          <h2>¡Solicitud enviada con éxito!</h2>
-          <p>Te contactaremos a la brevedad con opciones que se ajusten a lo que buscas.</p>
+      <div className="form-card" ref={wrapperRef}>
+        <div className="success-container">
+          <div className="success-icon"><Icon name="check" size={40} /></div>
+          <h2 className="success-title">¡Solicitud enviada!</h2>
+          <p className="success-message">
+            Te contactaremos a la brevedad con opciones que se ajusten a lo que buscas.
+          </p>
         </div>
       </div>
     )
   }
 
-  const isLastStep = step === TOTAL_STEPS - 1
-
   return (
-    <div className="form-wrapper" ref={wrapperRef}>
-      <div className="form-card">
-        {/* Progress */}
-        <div className="progress-section">
-          <p className="progress-label">Paso {step + 1} de {TOTAL_STEPS}</p>
-          <div className="progress-track">
-            <div className="progress-fill" style={{ width: `${progressPct}%` }}>
-              <span className="progress-text">{progressPct}%</span>
-            </div>
+    <div className="form-card" ref={wrapperRef}>
+      {/* Progress */}
+      <div className="progress-container">
+        <div className="progress-text">Paso {step + 1} de {TOTAL_STEPS}</div>
+        <div className="progress-bar-track">
+          <div className="progress-bar-fill" style={{ width: `${progressPct}%` }}>
+            <span className="progress-bar-label">{progressPct}%</span>
           </div>
         </div>
+      </div>
 
+      <div className="form-body" key={step}>
         {/* Step 0: Transaction Type */}
         {step === 0 && (
-          <div className="step-content">
-            <h2 className="step-title">Seleccione el tipo de transacción:</h2>
+          <div className="slide-in">
+            <h2 className="step-title">Seleccione el tipo de transacción: <span className="required">*</span></h2>
             <div className="operation-grid">
               {[
-                { value: 'Compra', label: 'COMPRA' },
-                { value: 'Arriendo', label: 'ARRIENDO' },
+                { value: 'Compra', label: 'COMPRA', icon: 'search', desc: 'Quiero comprar un inmueble' },
+                { value: 'Arriendo', label: 'ARRIENDO', icon: 'apartment', desc: 'Quiero arrendar un inmueble' },
               ].map(op => (
                 <button key={op.value}
-                  className={`operation-btn ${form.operation_type === op.value ? 'selected' : ''}`}
+                  className={`operation-card ${form.operation_type === op.value ? 'selected' : ''}`}
                   onClick={() => set('operation_type')(op.value)}
                 >
-                  {op.label}
+                  <div className="operation-icon"><Icon name={op.icon} size={36} /></div>
+                  <div className="operation-label">{op.label}</div>
+                  <div className="operation-desc">{op.desc}</div>
+                  {form.operation_type === op.value && <div className="operation-check"><Icon name="check" size={16} /></div>}
                 </button>
               ))}
             </div>
@@ -253,16 +259,17 @@ export default function BuscarForm() {
 
         {/* Step 1: Property Type */}
         {step === 1 && (
-          <div className="step-content">
-            <h2 className="step-title">Seleccione el tipo de inmueble:</h2>
-            <div className="property-grid">
+          <div className="slide-in">
+            <h2 className="step-title">Seleccione el tipo de inmueble: <span className="required">*</span></h2>
+            <div className="property-type-grid">
               {PROPERTY_TYPES.map(pt => (
                 <button key={pt.value}
-                  className={`property-btn ${form.property_type === pt.value ? 'selected' : ''}`}
+                  className={`property-type-card ${form.property_type === pt.value ? 'selected' : ''}`}
                   onClick={() => set('property_type')(pt.value)}
                 >
-                  <Icon name={pt.icon} size={32} />
-                  <span>{pt.value.toUpperCase()}</span>
+                  <div className="pt-icon"><Icon name={pt.icon} size={28} /></div>
+                  <div className="pt-label">{pt.value.toUpperCase()}</div>
+                  {form.property_type === pt.value && <div className="pt-check"><Icon name="check" size={12} /></div>}
                 </button>
               ))}
             </div>
@@ -272,7 +279,7 @@ export default function BuscarForm() {
 
         {/* Step 2: Max Budget */}
         {step === 2 && (
-          <div className="step-content">
+          <div className="slide-in">
             <h2 className="step-title">Seleccione valor máximo de inversión:</h2>
             <div className="field-group">
               <input
@@ -288,7 +295,7 @@ export default function BuscarForm() {
 
         {/* Step 3: Zone/Commune */}
         {step === 3 && (
-          <div className="step-content">
+          <div className="slide-in">
             <h2 className="step-title">Indique la comuna o zona en la que está interesado:</h2>
             <div className="field-group">
               <input
@@ -305,71 +312,64 @@ export default function BuscarForm() {
 
         {/* Step 4: Characteristics */}
         {step === 4 && (
-          <div className="step-content">
+          <div className="slide-in">
             <h2 className="step-title">Indique las características adicionales:</h2>
 
-            {/* Bedrooms */}
-            <div className="number-row">
-              <span className="number-label"><Icon name="bed" size={20} /> Habitaciones:</span>
-              <div className="number-options">
+            <div className="feature-row">
+              <div className="feature-label"><Icon name="bed" size={22} /> Habitaciones:</div>
+              <div className="number-selector">
                 {NUMBER_OPTIONS.map(n => (
                   <button key={`bed-${n}`}
                     className={`number-btn ${form.bedrooms === n ? 'selected' : ''}`}
-                    onClick={() => set('bedrooms')(n)}
-                  >{n}</button>
+                    onClick={() => set('bedrooms')(n)}>{n}</button>
                 ))}
               </div>
             </div>
 
-            {/* Bathrooms */}
-            <div className="number-row">
-              <span className="number-label"><Icon name="bath" size={20} /> Baños:</span>
-              <div className="number-options">
+            <div className="feature-row">
+              <div className="feature-label"><Icon name="bath" size={22} /> Baños:</div>
+              <div className="number-selector">
                 {NUMBER_OPTIONS.map(n => (
                   <button key={`bath-${n}`}
                     className={`number-btn ${form.bathrooms === n ? 'selected' : ''}`}
-                    onClick={() => set('bathrooms')(n)}
-                  >{n}</button>
+                    onClick={() => set('bathrooms')(n)}>{n}</button>
                 ))}
               </div>
             </div>
 
-            {/* Amenities */}
-            <div className="amenities-section">
-              <label className="amenities-label">Características:</label>
-              <div className="amenities-grid">
-                {AMENITIES.map(a => (
-                  <button key={a.key}
-                    className={`amenity-btn ${form.amenities.includes(a.key) ? 'selected' : ''}`}
-                    onClick={() => toggleAmenity(a.key)}
-                  >
-                    <Icon name={a.icon} size={40} />
-                    <span>{a.label}</span>
-                  </button>
-                ))}
-              </div>
+            <div className="feature-section-label">Características:</div>
+            <div className="amenities-grid">
+              {AMENITIES.map(am => (
+                <button key={am.key}
+                  className={`amenity-card ${form.amenities.includes(am.key) ? 'selected' : ''}`}
+                  onClick={() => toggleAmenity(am.key)}
+                >
+                  <div className="amenity-icon"><Icon name={am.icon} size={32} /></div>
+                  <div className="amenity-label">{am.label}</div>
+                  {form.amenities.includes(am.key) && <div className="amenity-check"><Icon name="check" size={12} /></div>}
+                </button>
+              ))}
             </div>
           </div>
         )}
 
         {/* Step 5: Contact Info */}
         {step === 5 && (
-          <div className="step-content">
-            <h2 className="step-title">Datos de contacto</h2>
-            <div className="contact-cols">
-              <div className="field-group">
-                <label>Nombre <span className="required">*</span></label>
-                <input className={`field-input ${errors.first_name ? 'error' : ''}`} type="text"
-                  placeholder="Nombre" value={form.first_name} onChange={set('first_name')} />
-                {errors.first_name && <div className="field-error">{errors.first_name}</div>}
+          <div className="slide-in">
+            <h2 className="step-title">Datos de contacto:</h2>
+
+            <div className="field-group">
+              <label>Nombre y Apellido <span className="required">*</span></label>
+              <div className="field-row">
+                <input className={`field-input ${errors.first_name ? 'error' : ''}`} placeholder="Nombre"
+                  value={form.first_name} onChange={set('first_name')} />
+                <input className="field-input" placeholder="Apellido"
+                  value={form.last_name} onChange={set('last_name')} />
               </div>
-              <div className="field-group">
-                <label>Apellido</label>
-                <input className="field-input" type="text"
-                  placeholder="Apellido" value={form.last_name} onChange={set('last_name')} />
-              </div>
+              {errors.first_name && <div className="field-error">{errors.first_name}</div>}
             </div>
-            <div className="contact-cols">
+
+            <div className="field-row">
               <div className="field-group">
                 <label>Correo electrónico <span className="required">*</span></label>
                 <input className={`field-input ${errors.email ? 'error' : ''}`} type="email"
@@ -406,30 +406,33 @@ export default function BuscarForm() {
 
             <div className="field-group">
               <label>¿Tienes alguna consulta o comentario adicional?</label>
-              <textarea className="field-input textarea" rows={3}
-                placeholder="Describe lo que buscas, requisitos especiales, etc."
+              <textarea className="field-textarea" placeholder="Describe lo que buscas, requisitos especiales, etc."
                 value={form.observations} onChange={set('observations')} />
             </div>
           </div>
         )}
 
         {/* Error */}
-        {errors.submit && <div className="submit-error">{errors.submit}</div>}
+        {errors.submit && (
+          <div className="field-error" style={{ justifyContent: 'center', marginTop: 12 }}>
+            <Icon name="x" size={14} />{errors.submit}
+          </div>
+        )}
 
         {/* Navigation */}
-        <div className="nav-buttons">
+        <div className="form-actions">
           {step > 0 && (
-            <button className="nav-btn back" onClick={goBack}>ANTERIOR</button>
+            <button className="btn btn-secondary" onClick={goBack}>
+              <Icon name="chevronLeft" size={16} /> ANTERIOR
+            </button>
           )}
-          {!isLastStep ? (
-            <button className="nav-btn next" onClick={goNext}>SIGUIENTE</button>
+          {step < TOTAL_STEPS - 1 ? (
+            <button className="btn btn-submit" onClick={goNext}>
+              SIGUIENTE <Icon name="chevronRight" size={16} />
+            </button>
           ) : (
-            <button className="nav-btn submit" onClick={handleSubmit} disabled={submitting}>
-              {submitting ? (
-                <><span className="btn-spinner" /> Enviando...</>
-              ) : (
-                <><Icon name="send" size={18} /> ENVIAR</>
-              )}
+            <button className="btn btn-submit" onClick={handleSubmit} disabled={submitting}>
+              {submitting ? <div className="spinner" /> : <><Icon name="send" size={16} /> ENVIAR</>}
             </button>
           )}
         </div>
