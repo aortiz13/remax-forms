@@ -304,7 +304,7 @@ export default function App() {
         {step === 1 && <Step2PropertyType form={form} set={set} errors={errors} />}
         {step === 2 && <Step3Location form={form} set={set} setForm={setForm} errors={errors} setErrors={setErrors} />}
         {step === 3 && <Step4Features form={form} set={set} toggleAmenity={toggleAmenity} />}
-        {step === 4 && <Step5Contact form={form} set={set} errors={errors} />}
+        {step === 4 && <Step5Contact form={form} set={set} errors={errors} phoneCountry={phoneCountry} setPhoneCountry={setPhoneCountry} />}
 
         {errors.submit && (
           <div className="field-error" style={{ justifyContent: 'center', marginTop: 12 }}>
@@ -523,7 +523,7 @@ function Step4Features({ form, set, toggleAmenity }) {
 // ═══════════════════════════════════
 // STEP 5: CONTACT INFO
 // ═══════════════════════════════════
-function Step5Contact({ form, set, errors }) {
+function Step5Contact({ form, set, errors, phoneCountry, setPhoneCountry }) {
   return (
     <div className="slide-in">
       <h2 className="step-title">Datos de contacto:</h2>
